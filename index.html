@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Happy Birthday Joojak 🎂</title>
+  <style>
+    :root{
+      --bg1:#ffdee9;
+      --bg2:#b5fffc;
+      --accent:#ff6fb5;
+      --card:#fff7ff;
+      --text:#5a1a4a;
+    }
+    html,body{
+      height:100%;
+      margin:0;
+      font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+      background:linear-gradient(135deg,var(--bg1),var(--bg2));
+    }
+    .center{
+      height:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-direction:column;
+      gap:24px;
+      padding:24px;
+    }
+    .headline{
+      font-size:clamp(22px,4vw,48px);
+      font-weight:800;
+      color:var(--text);
+      text-align:center;
+      text-shadow:0 4px 18px rgba(90,26,74,0.12);
+    }
+    .stage{
+      width:360px;max-width:92vw;height:360px;position:relative;display:grid;place-items:center;
+    }
+    .box-wrap{width:260px;height:260px;position:relative;perspective:1000px;}
+    .box{
+      width:100%;height:100%;
+      position:relative;
+      transform-style:preserve-3d;
+      transition:transform 800ms cubic-bezier(.2,.9,.3,1);
+    }
+    .flap{position:absolute;background:linear-gradient(180deg,#ffd8ef,#ffb4e6);box-shadow:0 8px 18px rgba(0,0,0,0.12);border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+    .flap.top{left:20%;right:20%;top:0;height:50%;transform-origin:50% 0%;}
+    .flap.bottom{left:20%;right:20%;bottom:0;height:50%;transform-origin:50% 100%;}
+    .flap.left{top:20%;bottom:20%;left:0;width:50%;transform-origin:0% 50%;}
+    .flap.right{top:20%;bottom:20%;right:0;width:50%;transform-origin:100% 50%;}
+    .lid{position:absolute;inset:20%;background:var(--card);border-radius:8px;display:flex;align-items:center;justify-content:center;box-shadow:inset 0 -6px 12px rgba(0,0,0,0.04);z-index:2;}
+    .cake{
+      position:absolute;left:50%;
+      transform:translateX(-50%) translateY(110%);
+      bottom:0;width:180px;height:160px;
+      display:flex;align-items:flex-end;justify-content:center;flex-direction:column;gap:6px;
+      transition:transform 700ms cubic-bezier(.2,.9,.2,1);
+      z-index:1;
+    }
+    .layer{width:160px;height:36px;border-radius:12px;background:linear-gradient(180deg,#ff9acb,#ff6fb5);box-shadow:0 8px 20px rgba(0,0,0,0.12);}
+    .frost{width:140px;height:24px;border-radius:12px;background:linear-gradient(180deg,#fff7ff,#ffe6f6);}
+    .candles{display:flex;gap:10px;align-items:flex-end;justify-content:center;margin-top:6px;}
+    .candle{width:10px;height:28px;background:#fff4e6;border-radius:3px;box-shadow:0 2px 6px rgba(0,0,0,0.08);position:relative;}
+    .flame{position:absolute;top:-12px;left:50%;transform:translateX(-50%);width:10px;height:16px;border-radius:50%/60% 60% 40% 40%;background:linear-gradient(180deg,#ffd45b,#ff6b6b);filter:drop-shadow(0 2px 6px rgba(255,107,107,0.25));}
+    .opened .flap.top{transform:rotateX(-85deg) translateY(-20px);}
+    .opened .flap.bottom{transform:rotateX(85deg) translateY(20px);}
+    .opened .flap.left{transform:rotateY(85deg) translateX(-20px);}
+    .opened .flap.right{transform:rotateY(-85deg) translateX(20px);}
+    .opened .cake{transform:translateX(-50%) translateY(-20%);}
+    canvas.confetti-canvas{position:fixed;left:0;top:0;width:100vw;height:100vh;pointer-events:none;z-index:50;}
+    .big-message{position:fixed;top:8vh;left:50%;transform:translateX(-50%);font-size:clamp(26px,6vw,64px);font-weight:900;color:#fff;padding:12px 28px;border-radius:24px;background:linear-gradient(90deg,#ff7bb8,#ffd29a);box-shadow:0 18px 60px rgba(255,123,184,0.18);opacity:0;transition:all 700ms cubic-bezier(.2,.9,.2,1);z-index:60;}
+    .opened + .big-message{opacity:1;}
+    .hint{font-size:14px;color:rgba(90,26,74,0.7);}
+  </style>
+</head>
+<body>
+  <div class="center">
+    <div class="headline">برای Joojak؛ یک سورپرایز تولد 🎀</div>
+    <div class="stage">
+      <div class="box-wrap" id="boxWrap">
+        <div class="box" id="box">
+          <div class="flap top"></div>
+          <div class="flap bottom"></div>
+          <div class="flap left"></div>
+          <div class="flap right"></div>
+          <div class="lid">باز کن!</div>
+          <div class="cake" id="cake">
+            <div class="layer"></div>
+            <div class="frost"></div>
+            <div class="layer" style="width:140px;height:32px;border-radius:10px;"></div>
+            <div class="candles">
+              <div class="candle"><div class="flame"></div></div>
+              <div class="candle"><div class="flame"></div></div>
+              <div class="candle"><div class="flame"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <canvas class="confetti-canvas" id="confettiCanvas"></canvas>
+    </div>
+    <div class="hint">برای باز کردن روی جعبه کلیک کن 🎉</div>
+  </div>
+  <div class="big-message" id="bigMessage">🎂 Happy Birthday Joojak 🎂</div>
+  <audio id="birthdayAudio" preload="auto">
+    <source src="happy_birthday.mp3" type="audio/mpeg">
+  </audio>
+  <script>
+    const canvas=document.getElementById('confettiCanvas'),ctx=canvas.getContext('2d');
+    let W=canvas.width=innerWidth,H=canvas.height=innerHeight;
+    window.addEventListener('resize',()=>{W=canvas.width=innerWidth;H=canvas.height=innerHeight});
+    function rand(a,b){return Math.random()*(b-a)+a}
+    class Particle{
+      constructor(x,y,angle,speed,size,color){this.x=x;this.y=y;this.vx=Math.cos(angle)*speed;this.vy=Math.sin(angle)*speed;this.size=size;this.color=color;this.life=0;this.ttl=rand(60,140);}
+      update(){this.x+=this.vx;this.y+=this.vy;this.vy+=0.2;this.vx*=0.99;this.life++;}
+      draw(){ctx.save();ctx.translate(this.x,this.y);ctx.rotate(this.life*0.08);ctx.fillStyle=this.color;ctx.fillRect(-this.size/2,-this.size/2,this.size,this.size);ctx.restore();}
+    }
+    let particles=[];
+    function emitBurst(x,y,spread,count){
+      for(let i=0;i<count;i++){
+        const a=rand(-spread,spread)*Math.PI/180+rand(-0.3,0.3);
+        const speed=rand(4,10);
+        const size=Math.round(rand(6,12));
+        const colors=['#ff6fb5','#ffd166','#ff9acb','#a0e7e5','#bdb2ff'];
+        particles.push(new Particle(x,y,a,speed,size,colors[Math.floor(rand(0,colors.length))]));
+      }
+    }
+    function loop(){
+      ctx.clearRect(0,0,W,H);
+      for(let i=particles.length-1;i>=0;i--){const p=particles[i];p.update();p.draw();if(p.life>p.ttl||p.y>H+50)particles.splice(i,1);}
+      requestAnimationFrame(loop);
+    }loop();
+
+    const box=document.getElementById('box');
+    const boxWrap=document.getElementById('boxWrap');
+    const cake=document.getElementById('cake');
+    const bigMessage=document.getElementById('bigMessage');
+    const audio=document.getElementById('birthdayAudio');
+    let opened=false;
+    function openBox(){
+      if(opened)return;
+      opened=true;
+      boxWrap.classList.add('opened');
+      box.classList.add('opened');
+      emitBurst(50,50,120,40);
+      emitBurst(W-50,50,60,40);
+      emitBurst(50,H-50,80,40);
+      emitBurst(W-50,H-50,70,40);
+      let bursts=0;
+      const int=setInterval(()=>{emitBurst(rand(40,W-40),rand(40,H-40),120,18);bursts++;if(bursts>8)clearInterval(int);},300);
+      bigMessage.style.opacity='1';
+      if(audio){audio.currentTime=0;audio.play().catch(()=>{});}
+      document.querySelectorAll('.flame').forEach((f,i)=>{f.animate([{transform:'translateX(-50%) scale(1)',opacity:1},{transform:'translateX(-50%) scale(1.18)',opacity:0.85},{transform:'translateX(-50%) scale(1)',opacity:1}],{duration:900+i*120,iterations:Infinity});});
+    }
+    box.addEventListener('click',openBox);
+  </script>
+</body>
+</html>
